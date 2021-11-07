@@ -10,7 +10,7 @@ const Layout = ({ children }: LayoutProps) => {
     return (
         <div className="font-mono">
             <Navbar />
-            <main>
+            <main className="container w-4/5">
                 {children}
             </main>
         </div>
