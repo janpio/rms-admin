@@ -1,17 +1,15 @@
 
-import Box from 'components/dashboard/Box'
-import FilterTab from 'components/dashboard/FilterTab'
+import { Box, RecentOrderPaper, FilterTab } from 'components/dashboard'
 import type { NextPage } from 'next'
+import React from 'react'
 
 const Dashborad: NextPage = () => {
   return (
-    <div>
-      <h1 className='my-4 font-bold'>Welcome, Porlar</h1>
-      {/* Filer By Day,Weak,Month */}
-      <div className='mb-3'>
-        <FilterTab />
-      </div>
+    <div className='space-y-3'>
+      <h1 className='font-bold text-lg'>Welcome, Porlar</h1>
+      <FilterTab />
       <Box />
+      <RecentOrderPaper />
     </div>
   )
 }
