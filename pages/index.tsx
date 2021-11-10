@@ -9,7 +9,12 @@ const Dashborad: NextPage = () => {
       <h1 className='font-bold text-lg'>Welcome, Porlar</h1>
       <FilterTab />
       <Box />
-      <RecentOrderPaper />
+      <div className='flex gap-3'>
+        <RecentOrderPaper />
+        <RecentOrderPaper />
+        <RecentOrderPaper />
+      </div>
+
     </div>
   )
 }

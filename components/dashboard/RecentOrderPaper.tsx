@@ -30,6 +30,51 @@ export default function FilterPaper() {
                         <td className='border-b p-1'>222</td>
                         <td className='border-b p-1'>Detail</td>
                     </tr>
+                    <tr>
+                        <td className='border-b p-1'>Mango Rice</td>
+                        <td className='border-b p-1'>1000</td>
+                        <td className='border-b p-1'>Detail</td>
+                    </tr>
+                    <tr className="bg-emerald-200">
+                        <td className='border-b p-1'>Banana</td>
+                        <td className='border-b p-1'>192</td>
+                        <td className='border-b p-1'>Detail</td>
+                    </tr>
+                    <tr>
+                        <td className='border-b p-1'>Piza</td>
+                        <td className='border-b p-1'>222</td>
+                        <td className='border-b p-1'>Detail</td>
+                    </tr>
+                    <tr>
+                        <td className='border-b p-1'>Mango Rice</td>
+                        <td className='border-b p-1'>1000</td>
+                        <td className='border-b p-1'>Detail</td>
+                    </tr>
+                    <tr className="bg-emerald-200">
+                        <td className='border-b p-1'>Banana</td>
+                        <td className='border-b p-1'>192</td>
+                        <td className='border-b p-1'>Detail</td>
+                    </tr>
+                    <tr>
+                        <td className='border-b p-1'>Piza</td>
+                        <td className='border-b p-1'>222</td>
+                        <td className='border-b p-1'>Detail</td>
+                    </tr>
+                    <tr>
+                        <td className='border-b p-1'>Mango Rice</td>
+                        <td className='border-b p-1'>1000</td>
+                        <td className='border-b p-1'>Detail</td>
+                    </tr>
+                    <tr className="bg-emerald-200">
+                        <td className='border-b p-1'>Banana</td>
+                        <td className='border-b p-1'>192</td>
+                        <td className='border-b p-1'>Detail</td>
+                    </tr>
+                    <tr>
+                        <td className='border-b p-1'>Piza</td>
+                        <td className='border-b p-1'>222</td>
+                        <td className='border-b p-1'>Detail</td>
+                    </tr>
                 </tbody>
             </table>
         </div>

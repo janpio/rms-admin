@@ -1,10 +1,12 @@
-import MenuItemList from 'components/menu/MenuItemList';
+import { MenuItemList, FilterMenu, MenuAction } from 'components/menu';
 import type { NextPage } from 'next'
 
 const Menu: NextPage = () => {
     return (
-        <div>
+        <div className='space-y-2'>
+            <FilterMenu />
             <MenuItemList />
+            <MenuAction />
         </div>
     )
 }

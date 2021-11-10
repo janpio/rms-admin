@@ -26,9 +26,101 @@ const MenuItemList = () => {
             name: "PipeApple",
             price: 100
         },
+        {
+            name: "Mango",
+            price: 400
+        },
+        {
+            name: "PipeApple",
+            price: 100
+        },
+        {
+            name: "Banana",
+            price: 200
+        },
+        {
+            name: "Apple",
+            price: 200
+        },
+        {
+            name: "Orange",
+            price: 200
+        },
+        {
+            name: "Mango",
+            price: 400
+        },
+        {
+            name: "PipeApple",
+            price: 100
+        },
+        {
+            name: "Mango",
+            price: 400
+        },
+        {
+            name: "PipeApple",
+            price: 100
+        },
+        {
+            name: "Banana",
+            price: 200
+        },
+        {
+            name: "Apple",
+            price: 200
+        },
+        {
+            name: "Orange",
+            price: 200
+        },
+        {
+            name: "Mango",
+            price: 400
+        },
+        {
+            name: "PipeApple",
+            price: 100
+        },
+        {
+            name: "Mango",
+            price: 400
+        },
+        {
+            name: "PipeApple",
+            price: 100
+        },
+        {
+            name: "Banana",
+            price: 200
+        },
+        {
+            name: "Apple",
+            price: 200
+        },
+        {
+            name: "Orange",
+            price: 200
+        },
+        {
+            name: "Mango",
+            price: 400
+        },
+        {
+            name: "PipeApple",
+            price: 100
+        },
+        {
+            name: "Mango",
+            price: 400
+        },
+        {
+            name: "PipeApple",
+            price: 100
+        }
     ];
     return (
-        <div className='flex gap-2'>
+        <div className='flex flex-wrap gap-2'>
             {
                 menuList.map((menu, i) => (
                     <MenuItem key={i} {...menu} />

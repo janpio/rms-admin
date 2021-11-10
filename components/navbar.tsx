@@ -29,34 +29,31 @@ const Navbar = () => {
         },
     ]
     return (
-        <>
-            <div className='py-3'>
-                <div className='text-center'>
-                    <h1 className='font-bold text-gray-800 text-2xl tracking-wide'>Restaurant Management System</h1>
-                </div>
-                <ul className='flex justify-center text-xl gap-3 text-gray-700 mt-3 border-b pb-3'>
-                    {
-                        navlist.map((nav, i) => {
-                            const active = asPath === nav.href;
-                            const className = nav.href === '/orderlive' ?
-                                (asPath === '/orderlive' ?
-                                    ('border-red-500 border px-5 shadow-md rounded-md hover:bg-red-500 hover:text-white')
-                                    :
-                                    ('border-red-500 border px-5 shadow-md text-red-500 rounded-md hover:bg-red-500 hover:text-white')
-                                )
-                                : 'rounded-md px-2 hover:bg-red-500 hover:text-white';
-                            return (
-                                <React.Fragment key={i}>
-                                    <li className={active ? classNames(className, 'bg-red-500 text-white') : className}>
-                                        <Link href={nav.href}>{nav.name}</Link>
-                                    </li>
-                                </React.Fragment>
+        <div className='mb-5 sticky top-0 z-10 py-5 bg-white shadow-sm border-b'>
+            <ul className='flex justify-center text-lg gap-3 text-gray-700'>
+                {
+                    navlist.map((nav, i) => {
+                        const active = asPath === nav.href;
+                        const className = nav.href === '/orderlive' ?
+                            (asPath === '/orderlive' ?
+                                ('border-red-500 border px-5 py-1 shadow-md rounded-md hover:bg-red-500 hover:text-white')
+                                :
+                                ('border-red-500 border px-5 py-1 shadow-md text-red-500 rounded-md hover:bg-red-500 hover:text-white')
                             )
-                        })
-                    }
-                </ul>
-            </div>
-        </>
+                            : 'rounded-md px-2 py-1 hover:bg-red-500 hover:text-white';
+                        return (
+                            <React.Fragment key={i}>
+                                <li>
+                                    <Link href={nav.href}>
+                                        <a className={active ? classNames(className, 'bg-red-500 text-white') : className}>{nav.name}</a>
+                                    </Link>
+                                </li>
+                            </React.Fragment>
+                        )
+                    })
+                }
+            </ul>
+        </div>
     )
 }
 export default Navbar;
