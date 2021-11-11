@@ -6,7 +6,7 @@ export default function FilterTab() {
         <Tab.Group defaultIndex={0}>
             <Tab.List className="inline-flex space-x-1 rounded-md border">
                 {
-                    ['Daily', 'Weakly', 'Monthly'].map(f => (
+                    ['Daily', 'Weekly', 'Monthly'].map(f => (
                         <Tab
                             key={f}
                             className={({ selected }) =>
