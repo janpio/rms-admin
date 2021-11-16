@@ -23,29 +23,24 @@ const Navbar = () => {
             name: 'Order',
             href: '/order'
         },
-        {
-            name: 'Order Live',
-            href: '/orderlive',
-        },
     ]
     return (
-        <div className='mb-5 sticky top-0 z-10 py-5 bg-white shadow-sm border-b'>
-            <ul className='flex justify-center text-lg gap-3 text-gray-700'>
+        <div className='sticky top-0 z-10 bg-white shadow-sm border-r pt-3 px-1'>
+            <ul className='flex flex-col justify-center items-stretch text-center text-lg gap-1 text-gray-700'>
+                <li className='mb-3'>
+                    <Link href='/orderlive'>
+                        <a className="border-red-500 block border-r border-l py-1 shadow-md text-red-500 rounded-sm hover:bg-red-500 hover:text-white">Order Live</a>
+                    </Link>
+                </li>
                 {
                     navlist.map((nav, i) => {
                         const active = asPath === nav.href;
-                        const className = nav.href === '/orderlive' ?
-                            (asPath === '/orderlive' ?
-                                ('border-red-500 border px-5 py-1 shadow-md rounded-md hover:bg-red-500 hover:text-white')
-                                :
-                                ('border-red-500 border px-5 py-1 shadow-md text-red-500 rounded-md hover:bg-red-500 hover:text-white')
-                            )
-                            : 'rounded-md px-2 py-1 hover:bg-red-500 hover:text-white';
+                        const className = 'rounded-md py-1 block hover:bg-red-500 hover:text-white';
                         return (
                             <React.Fragment key={i}>
                                 <li>
                                     <Link href={nav.href}>
-                                        <a className={active ? classNames(className, 'bg-red-500 text-white') : className}>{nav.name}</a>
+                                        <a className={active ? classNames(className, "bg-red-500 text-white") : className}>{nav.name}</a>
                                     </Link>
                                 </li>
                             </React.Fragment>
