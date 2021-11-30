@@ -6,16 +6,26 @@ import React from 'react'
 const Dashborad: NextPage = () => {
   return (
     <section className='flex'>
-      <div className='space-y-4 md:w-9/12  px-7 '>
-        <h1 className='font-bold text-lg'>Welcome, Porlar</h1>
-        <FilterTab />
-        <Box />
+      <section className='space-y-7 md:w-9/12  px-7 '>
+        <section className='space-y-3'>
+          <h1 className='font-bold text-lg tracking-wider'>Welcome, Porlar</h1>
+          <FilterTab />
+          <Box />
+        </section>
+
         <div className='flex gap-3'>
           <RecentOrderPaper />
         </div>
-      </div>
-      <section className='md:w-3/12 border-2 border-green-600'>
-        <div>Discount</div>
+      </section>
+      <section className='md:w-3/12 p-3 space-y-3'>
+        <div className='bg-red-500 p-10 rounded-md'>
+          <h1>Pizza Hut</h1>
+          <h1>Discount 30%</h1>
+        </div>
+        <div className='bg-yellow-500 p-10 rounded-md'>
+          <h1>Cake</h1>
+          <h1>Discount 30%</h1>
+        </div>
       </section>
     </section>
 

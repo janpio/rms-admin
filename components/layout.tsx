@@ -12,10 +12,9 @@ const Layout = ({ children }: LayoutProps) => {
             <Navbar className='sticky top-0 px-5 w-56' />
             <main className='flex flex-col flex-1 bg-secondary shadow-sm'>
                 <TopBar />
-                <section className='flex mb-4' style={{ minHeight: '83vh' }}>
+                <section className='mb-4' style={{ minHeight: '83vh' }}>
                     {children}
                 </section>
-
             </main>
         </div>
     )
