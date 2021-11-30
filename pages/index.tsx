@@ -14,7 +14,6 @@ const Dashborad: NextPage = () => {
         <RecentOrderPaper />
         <RecentOrderPaper />
       </div>
-
     </div>
   )
 }

@@ -7,7 +7,7 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      = "file:./dev.db"
+  url      = "file:dev.db"
 }
 
 model User {
@@ -16,31 +16,53 @@ model User {
   name  String?
   role  String  @default("WAITER")
   Menu  Menu[]
+
+  @@map("users")
 }
 
 model Menu {
-  id          Int                @id @default(autoincrement())
-  name        String
-  Price       Decimal
-  menu_image  String?
-  description String?
-  rating      Int                @default(0)
-  categories  CategoriesOnMenu[]
-  creator     User?              @relation(fields: [creatorId], references: [id])
-  creatorId   Int?
+  id           Int          @id @default(autoincrement())
+  name         String
+  price        Decimal
+  menu_image   String?
+  description  String?
+  rating       Int          @default(0)
+  is_available Boolean      @default(false)
+  view_count   Int          @default(0)
+  slug         String?
+  creator      User?        @relation(fields: [creatorId], references: [id])
+  creatorId    Int?
+  createdAt    DateTime     @default(now()) @map(name: "created_at")
+  updatedAt    DateTime     @updatedAt @map(name: "updated_at")
+  tags         TagsOnMenu[]
+  categories   Categories   @relation(fields: [categoryId], references: [id])
+  categoryId   Int
+
+  @@map("menus")
 }
 
-model Category {
-  id    Int                @id @default(autoincrement())
+model Categories {
+  id    Int    @id @default(autoincrement())
   name  String
-  menus CategoriesOnMenu[]
+  menus Menu[]
+
+  @@map("categories")
 }
 
-model CategoriesOnMenu {
-  menu       Menu     @relation(fields: [menuId], references: [id])
-  menuId     Int
-  category   Category @relation(fields: [categoryId], references: [id])
-  categoryId Int
+model TagsOnMenu {
+  tag    Tags @relation(fields: [tagId], references: [id])
+  tagId  Int
+  menu   Menu @relation(fields: [menuId], references: [id])
+  menuId Int
 
-  @@id([menuId, categoryId])
+  @@id([menuId, tagId])
+  @@map("tagsonmenu")
+}
+
+model Tags {
+  id    Int          @id @default(autoincrement())
+  name  String
+  menus TagsOnMenu[]
+
+  @@map("tags")
 }

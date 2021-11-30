@@ -8,19 +8,15 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
     return (
-        <div className="font-mono hideScrollBar bg-white mb-4">
-            <div className='my-5 text-center bg-white border-b pb-5'>
-                <h1 className='font-bold text-gray-800 text-2xl tracking-wide'>Restaurant Management System</h1>
-            </div>
-            <div className='flex'>
-                <div className='w-40 mx-auto'>
-                    <Navbar />
-                </div>
-                <main className='flex-1 px-3'>
+        <div className='flex bg-white text-base font-popin'>
+            <Navbar className='sticky top-0 left-0 px-2 w-44' />
+            <main className='flex flex-col flex-1 bg-secondary shadow-sm'>
+                <TopBar />
+                <section className='px-3 mb-4' style={{ minHeight: '83vh' }}>
                     {children}
-                </main>
-            </div>
+                </section>
 
+            </main>
         </div>
     )
 }

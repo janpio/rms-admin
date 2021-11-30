@@ -38,7 +38,7 @@ async function main() {
   // }
 
   for (const c of categoryData) {
-    const category = await prisma.category.create({
+    const category = await prisma.categories.create({
       data: c,
     });
     console.log(`Created user with id: ${category.id}`);
