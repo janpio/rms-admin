@@ -1,6 +1,6 @@
 export default function FilterPaper() {
     return (
-        <div className='p-3 border w-1/3 rounded-md'>
+        <div className='p-3 border bg-white rounded-md'>
             <div className='flex justify-between items-center'>
                 <h1 className="text-lg tranfo">Recent Orders Requested</h1>
                 <button className='bg-red-500 text-white px-3 py-1 rounded-md'>View All</button>
