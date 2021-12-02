@@ -2,7 +2,6 @@
 import { Box, RecentOrderPaper, FilterTab } from 'components/dashboard'
 import type { NextPage } from 'next'
 import React from 'react'
-
 const Dashborad: NextPage = () => {
   return (
     <section className='flex'>

@@ -6,11 +6,11 @@ import { useState } from 'react';
 const Menu: NextPage = () => {
     const [toggleMenu, setToggleMenu] = useState(false);
     return (
-        <div className='space-y-2'>
-            <MenuAction onClick={(key) => setToggleMenu(!toggleMenu)} />
-            <MenuItemList isShowing={!toggleMenu} />
-            <CreateMenu isShowing={toggleMenu} />
-        </div>
+        <section className='space-y-2 px-7'>
+            <MenuAction onClick={(key) => setToggleMenu(true)} />
+            <MenuItemList isShowing={true} />
+            <CreateMenu isShowing={toggleMenu} closeDialogModal={() => setToggleMenu(false)} />
+        </section>
     )
 }
 
