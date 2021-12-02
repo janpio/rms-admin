@@ -4,7 +4,7 @@ class MyDocument extends Document {
     render() {
         return (
             <Html>
-                <Head>
+                <Head title='RMSystem'>
                     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
                 </Head>
                 <body>
