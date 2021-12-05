@@ -1,5 +1,7 @@
 import { Transition, Dialog } from '@headlessui/react'
 import { Close } from '@mui/icons-material';
+import SelectBox from 'components/common/SelectBox';
+import TagBox from 'components/common/TagBox';
 import { Fragment, useState } from 'react'
 
 type CreateMenuProp = {
@@ -31,8 +33,8 @@ export default function CreateMenu({ isShowing, closeDialogModal }: CreateMenuPr
                         <h1 className='font-bold text-xl tracking-wider'>Create Menu</h1>
                         <Close fontSize='medium' sx={{ ":hover": { backgroundColor: 'gray', color: 'white', cursor: 'pointer' }, borderRadius: '50%' }} onClick={() => closeDialogModal()} />
                     </div>
-                    <section className='flex gap-5'>
-                        <div className='flex-auto space-y-4'>
+                    <section className='grid grid-cols-2 gap-5'>
+                        <div className='space-y-4'>
                             <div>
                                 <label htmlFor="name" className="block text-sm font-medium">
                                     Name
@@ -59,6 +61,20 @@ export default function CreateMenu({ isShowing, closeDialogModal }: CreateMenuPr
                             </div>
 
                             <div>
+                                <label htmlFor="category" className="block text-sm font-medium text-gray-700">
+                                    Category
+                                </label>
+                                <SelectBox />
+                            </div>
+
+                            <div className='flex-grow-0'>
+                                <label htmlFor="tags" className="block text-sm font-medium text-gray-700">
+                                    Tag
+                                </label>
+                                <TagBox classNames='mt-1' />
+                            </div>
+
+                            <div>
                                 <label htmlFor="description" className="block text-sm font-medium text-gray-700">
                                     Description
                                 </label>
@@ -69,6 +85,7 @@ export default function CreateMenu({ isShowing, closeDialogModal }: CreateMenuPr
                                 />
                             </div>
 
+
                             <button
                                 type="submit"
                                 className="flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -76,7 +93,7 @@ export default function CreateMenu({ isShowing, closeDialogModal }: CreateMenuPr
                                 Save
                             </button>
                         </div>
-                        <div className='flex-auto'>
+                        <div>
                             <label className="block text-sm font-medium text-gray-700">Menu Image</label>
                             <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
                                 <div className="space-y-1 text-center">

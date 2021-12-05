@@ -1,5 +1,5 @@
 import { Tab } from '@headlessui/react'
-import { classNames } from 'utli/Utlities'
+import { classNames } from 'utli'
 
 export default function FilterTab() {
     return (

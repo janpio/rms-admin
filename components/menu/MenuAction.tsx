@@ -9,10 +9,6 @@ export default function MenuAction({ onClick }: MenuActionProps) {
             name: "NEW",
             key: 'new'
         },
-        {
-            name: "False",
-            key: 'false'
-        }
     ]
     return (
         <div className='fixed rounded-l-md right-0 top-1/4 w-20 bottom-auto space-y-2 h-2/4 bg-gray-100 py-4'>

@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import Link from "next/link";
 import React from "react";
-import { classNames } from "utli/Utlities";
+import { classNames } from "utli";
 import { Dashboard, MenuBook, TableRestaurant, FormatListNumbered, Logout } from "@mui/icons-material";
 
 type NavbarProps = {
