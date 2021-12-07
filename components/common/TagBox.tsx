@@ -11,9 +11,10 @@ interface SelectItem {
 }
 type TagBoxProps = {
     tagOptions?: SelectItem[] | undefined;
-    classNames?: string
+    classNames?: string;
+    onChange?: (tags: Tag[] | unknown) => void
 }
-export default function TagBox({ tagOptions, classNames }: TagBoxProps) {
+export default function TagBox({ tagOptions, classNames, onChange }: TagBoxProps) {
     const animatedComponents = makeAnimated();
     const customStyles = {
         option: (provided: any, state: any) => ({
@@ -43,7 +44,7 @@ export default function TagBox({ tagOptions, classNames }: TagBoxProps) {
     const { data: tags, error } = useSWR<Tag[]>(baseURL + '/api/tags', fetcher);
 
     const _tagOptions = tags?.map(t => (
-        { label: t.name, value: t.name }
+        { label: t.name, value: t.id }
     ));
     return (
         <Select
@@ -52,6 +53,7 @@ export default function TagBox({ tagOptions, classNames }: TagBoxProps) {
             isSearchable
             closeMenuOnSelect={false}
             isMulti
+            onChange={(tags) => onChange && onChange(tags)}
             components={animatedComponents}
             options={_tagOptions}
         />

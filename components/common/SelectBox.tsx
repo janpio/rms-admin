@@ -6,21 +6,18 @@ import { baseURL } from 'config'
 import { fetcher } from 'utli'
 import Category from 'models/Category'
 
-const menuItems = [
-    { name: 'Wade Cooper' },
-    { name: 'Arlene Mccoy' },
-    { name: 'Devon Webb' },
-    { name: 'Tom Cook' },
-    { name: 'Tanya Fox' },
-    { name: 'Hellen Schmidt' },
-]
-
-export default function SelectBox() {
+type SelectBoxProps = {
+    onSelect: (category: Category) => void
+}
+export default function SelectBox({ onSelect }: SelectBoxProps) {
     const { data: categories, error } = useSWR<Category[]>(baseURL + '/api/categories', fetcher);
-    const [selected, setSelected] = useState(categories ? categories[0] : { name: 'Select' })
+    const [selected, setSelected] = useState({ id: 0, name: 'Select' })
     return (
         <div>
-            <Listbox value={selected} onChange={setSelected}>
+            <Listbox value={selected} onChange={(category) => {
+                setSelected(category);
+                onSelect && onSelect(category)
+            }}>
                 <div className="relative mt-1">
                     <Listbox.Button className="relative w-full py-2 pl-3 pr-10 text-left bg-white rounded-lg border cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-white focus-visible:ring-offset-orange-300 focus-visible:ring-offset-2 focus-visible:border-indigo-500 sm:text-sm">
                         <span className="block truncate">{selected?.name}</span>
