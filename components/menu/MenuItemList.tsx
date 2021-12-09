@@ -1,7 +1,8 @@
 import MenuItem from './MenuItem';
 import { Transition } from '@headlessui/react'
-import React from 'react';
+import React, { useState } from 'react';
 import FilterMenu from './FilterMenu';
+import CreateMenu from './CreateMenu';
 
 type MenuType = {
     name: string;
@@ -12,6 +13,7 @@ type MenuItemListProp = {
     isShowing: boolean
 }
 const MenuItemList: React.FC<MenuItemListProp> = ({ isShowing }) => {
+    const [visibleCreateMenu, setVisibleCreateMenu] = useState(false);
     const menuList: Array<MenuType> = [
         {
             name: "Banana",
@@ -139,10 +141,13 @@ const MenuItemList: React.FC<MenuItemListProp> = ({ isShowing }) => {
             leaveTo="opacity-0"
         >
             <Transition.Child>
-                <FilterMenu />
+                <FilterMenu onClickCreate={() => setVisibleCreateMenu(true)} />
+            </Transition.Child>
+            <Transition.Child>
+                <CreateMenu isShowing={visibleCreateMenu} closeDialogModal={() => setVisibleCreateMenu(false)} />
             </Transition.Child>
             <Transition.Child className='mt-3'>
-                <div className='flex flex-col gap-3 mr-20'>
+                <div className='flex flex-col gap-3'>
                     {
                         menuList.map((menu, i) => (
                             <MenuItem key={i} {...menu} />

@@ -8,6 +8,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const tags = await prisma.tags.findMany();
+  const tags = await prisma.tag.findMany();
   res.status(200).json(tags);
 }

@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import React from "react";
 import { classNames } from "utli";
-import { Dashboard, MenuBook, TableRestaurant, FormatListNumbered, Logout } from "@mui/icons-material";
+import { Dashboard, MenuBook, TableRestaurant, FormatListNumbered, Logout, Category, Tag } from "@mui/icons-material";
 
 type NavbarProps = {
     className: string;
@@ -19,6 +19,16 @@ const Navbar = ({ className }: NavbarProps) => {
             name: 'Menu Book',
             href: '/menu',
             icon: <MenuBook fontSize={'small'} />
+        },
+        {
+            name: 'Category',
+            href: '/category',
+            icon: <Category fontSize={'small'} />
+        },
+        {
+            name: 'Tag',
+            href: '/tag',
+            icon: <Tag fontSize={'small'} />
         },
         {
             name: 'Tables',

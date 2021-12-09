@@ -2,6 +2,7 @@ import { Transition, Dialog } from '@headlessui/react'
 import { Close } from '@mui/icons-material';
 import SelectBox from 'components/common/SelectBox';
 import TagBox from 'components/common/TagBox';
+import { baseURL } from 'config';
 import Category from 'models/Category';
 import Tag from 'models/Tag';
 import Image from 'next/image'
@@ -15,7 +16,8 @@ export default function CreateMenu({ isShowing, closeDialogModal }: CreateMenuPr
     const [menuImageURL, setMenuImageURL] = useState<File>();
     const [selectedCategory, setSelectedCategory] = useState<Category>();
     const [selectedTags, setSelectedTags] = useState<Tag[]>();
-    const namerRef = useRef<HTMLInputElement>(null);
+    const [isSaveLoading, setIsSaveLoading] = useState<boolean>(false);
+    const nameRef = useRef<HTMLInputElement>(null);
     const priceRef = useRef<HTMLInputElement>(null);
     const descRef = useRef<HTMLTextAreaElement>(null);
     const imageRef = useRef<HTMLInputElement>(null);
@@ -24,9 +26,30 @@ export default function CreateMenu({ isShowing, closeDialogModal }: CreateMenuPr
         closeDialogModal();
     }
 
-    const createMenu = (e: React.FormEvent<HTMLFormElement>) => {
+    const createMenu = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log(menuImageURL, selectedCategory, selectedTags, namerRef.current?.value, priceRef.current?.value, descRef.current?.value);
+        setIsSaveLoading(true);
+        const data = {
+            name: nameRef.current?.value!,
+            price: priceRef.current?.value!,
+            category: selectedCategory,
+            tags: selectedTags!,
+            description: descRef.current?.value!,
+            image: URL.createObjectURL(menuImageURL)
+        }
+        await fetch(baseURL + '/api/menus', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        }).then(response => response.json())
+            .then((result) => {
+                setIsSaveLoading(false);
+                closeDialogModal();
+            }).catch((err => {
+                setIsSaveLoading(false);
+            }));
     }
     return (
         <Transition
@@ -56,7 +79,7 @@ export default function CreateMenu({ isShowing, closeDialogModal }: CreateMenuPr
                                     Name
                                 </label>
                                 <input
-                                    ref={namerRef}
+                                    ref={nameRef}
                                     type="text"
                                     name="name"
                                     id="name"
@@ -109,6 +132,12 @@ export default function CreateMenu({ isShowing, closeDialogModal }: CreateMenuPr
                                 type="submit"
                                 className="flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                             >
+                                {
+                                    isSaveLoading && <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                }
                                 Save
                             </button>
                         </div>

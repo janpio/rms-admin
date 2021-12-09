@@ -74,17 +74,17 @@ model Menu {
   view_count   Int          @default(0)
   slug         String?
   creator      User?        @relation(fields: [creatorId], references: [id])
-  creatorId    String
+  creatorId    String?
   createdAt    DateTime     @default(now()) @map(name: "created_at")
   updatedAt    DateTime     @updatedAt @map(name: "updated_at")
   tags         TagsOnMenu[]
-  categories   Categories   @relation(fields: [categoryId], references: [id])
-  categoryId   Int
+  categories   Category?    @relation(fields: [categoryId], references: [id])
+  categoryId   Int?
 
   @@map("menus")
 }
 
-model Categories {
+model Category {
   id    Int    @id @default(autoincrement())
   name  String
   menus Menu[]
@@ -93,7 +93,7 @@ model Categories {
 }
 
 model TagsOnMenu {
-  tag    Tags @relation(fields: [tagId], references: [id])
+  tag    Tag  @relation(fields: [tagId], references: [id])
   tagId  Int
   menu   Menu @relation(fields: [menuId], references: [id])
   menuId Int
@@ -102,7 +102,7 @@ model TagsOnMenu {
   @@map("tagsonmenu")
 }
 
-model Tags {
+model Tag {
   id    Int          @id @default(autoincrement())
   name  String
   menus TagsOnMenu[]
