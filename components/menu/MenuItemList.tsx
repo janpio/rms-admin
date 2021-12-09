@@ -3,131 +3,19 @@ import { Transition } from '@headlessui/react'
 import React, { useState } from 'react';
 import FilterMenu from './FilterMenu';
 import CreateMenu from './CreateMenu';
+import useSWR from "swr";
+import { fetcher } from "utli";
+import { baseURL } from "config";
+import Menu from 'models/Menu';
 
-type MenuType = {
-    name: string;
-    price: number;
-}
+
 
 type MenuItemListProp = {
     isShowing: boolean
 }
 const MenuItemList: React.FC<MenuItemListProp> = ({ isShowing }) => {
     const [visibleCreateMenu, setVisibleCreateMenu] = useState(false);
-    const menuList: Array<MenuType> = [
-        {
-            name: "Banana",
-            price: 200
-        },
-        {
-            name: "Apple",
-            price: 200
-        },
-        {
-            name: "Orange",
-            price: 200
-        },
-        {
-            name: "Mango",
-            price: 400
-        },
-        {
-            name: "PipeApple",
-            price: 100
-        },
-        {
-            name: "Mango",
-            price: 400
-        },
-        {
-            name: "PipeApple",
-            price: 100
-        },
-        {
-            name: "Banana",
-            price: 200
-        },
-        {
-            name: "Apple",
-            price: 200
-        },
-        {
-            name: "Orange",
-            price: 200
-        },
-        {
-            name: "Mango",
-            price: 400
-        },
-        {
-            name: "PipeApple",
-            price: 100
-        },
-        {
-            name: "Mango",
-            price: 400
-        },
-        {
-            name: "PipeApple",
-            price: 100
-        },
-        {
-            name: "Banana",
-            price: 200
-        },
-        {
-            name: "Apple",
-            price: 200
-        },
-        {
-            name: "Orange",
-            price: 200
-        },
-        {
-            name: "Mango",
-            price: 400
-        },
-        {
-            name: "PipeApple",
-            price: 100
-        },
-        {
-            name: "Mango",
-            price: 400
-        },
-        {
-            name: "PipeApple",
-            price: 100
-        },
-        {
-            name: "Banana",
-            price: 200
-        },
-        {
-            name: "Apple",
-            price: 200
-        },
-        {
-            name: "Orange",
-            price: 200
-        },
-        {
-            name: "Mango",
-            price: 400
-        },
-        {
-            name: "PipeApple",
-            price: 100
-        },
-        {
-            name: "Mango",
-            price: 400
-        },
-        {
-            name: "PipeApple",
-            price: 100
-        }
-    ];
+    const { data: Menus, error } = useSWR<Menu[]>(baseURL + '/api/menus', fetcher);
 
     return (
         <Transition
@@ -149,7 +37,7 @@ const MenuItemList: React.FC<MenuItemListProp> = ({ isShowing }) => {
             <Transition.Child className='mt-3'>
                 <div className='flex flex-col gap-3'>
                     {
-                        menuList.map((menu, i) => (
+                        Menus && Menus.map((menu, i) => (
                             <MenuItem key={i} {...menu} />
                         ))
                     }

@@ -64,21 +64,21 @@ model User {
 }
 
 model Menu {
-  id           Int          @id @default(autoincrement())
+  id           Int         @id @default(autoincrement())
   name         String
   price        Decimal
   menu_image   String?
   description  String?
-  rating       Int          @default(0)
-  is_available Boolean      @default(false)
-  view_count   Int          @default(0)
+  rating       Int         @default(0)
+  is_available Boolean     @default(false)
+  view_count   Int         @default(0)
   slug         String?
-  creator      User?        @relation(fields: [creatorId], references: [id])
+  creator      User?       @relation(fields: [creatorId], references: [id])
   creatorId    String?
-  createdAt    DateTime     @default(now()) @map(name: "created_at")
-  updatedAt    DateTime     @updatedAt @map(name: "updated_at")
-  tags         TagsOnMenu[]
-  categories   Category?    @relation(fields: [categoryId], references: [id])
+  createdAt    DateTime    @default(now()) @map(name: "created_at")
+  updatedAt    DateTime    @updatedAt @map(name: "updated_at")
+  tags         TagOnMenu[]
+  categories   Category?   @relation(fields: [categoryId], references: [id])
   categoryId   Int?
 
   @@map("menus")
@@ -92,7 +92,7 @@ model Category {
   @@map("categories")
 }
 
-model TagsOnMenu {
+model TagOnMenu {
   tag    Tag  @relation(fields: [tagId], references: [id])
   tagId  Int
   menu   Menu @relation(fields: [menuId], references: [id])
@@ -103,9 +103,9 @@ model TagsOnMenu {
 }
 
 model Tag {
-  id    Int          @id @default(autoincrement())
+  id    Int         @id @default(autoincrement())
   name  String
-  menus TagsOnMenu[]
+  menus TagOnMenu[]
 
   @@map("tags")
 }

@@ -11,7 +11,16 @@ export default async function handler(
 ) {
   switch (req.method) {
     case "GET":
-      const menus = await prisma.menu.findMany();
+      const menus = await prisma.menu.findMany({
+        include: {
+          tags: {
+            include: {
+              tag: true,
+            },
+          },
+          categories: true,
+        },
+      });
       res.status(200).json(menus);
       break;
     case "POST":
