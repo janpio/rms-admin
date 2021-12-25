@@ -12,6 +12,11 @@ export default async function handler(
   switch (req.method) {
     case "GET":
       const menus = await prisma.menu.findMany({
+        orderBy: [
+          {
+            createdAt: "desc",
+          },
+        ],
         include: {
           tags: {
             include: {
