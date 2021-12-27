@@ -72,7 +72,7 @@ export default function CreateMenu({
     >
       <Dialog
         as="div"
-        className="fixed inset-0 z-10 mx-28 my-20 overflow-y-auto bg-white rounded-lg shadow-lg px-10 py-8 border"
+        className="fixed inset-0 z-10 px-28 py-20 overflow-y-auto bg-white rounded-lg shadow-lg border"
         onClose={closeModal}
       >
         <form className="mx-auto space-y-4" onSubmit={createMenu}>
