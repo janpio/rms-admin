@@ -72,16 +72,22 @@ const MenuItemList: React.FC<MenuItemListProp> = ({ isShowing }) => {
                 <td className="px-3 py-4">
                   <div>
                     <h1 className="text-gray-400">အမည်</h1>
-                    <h1 className="text-red-500 mt-1">{menu.name}</h1>
+                    <h1 className="text-red-500 mt-1 truncate text-sm lg:text-base">
+                      {menu.name}
+                    </h1>
                   </div>
                 </td>
                 <td className="px-3 py-4">
                   <div>
-                    <h1 className="text-gray-400">ဈေးနှုန်း</h1>
-                    <h1 className="text-red-500 mt-1">{menu.price} ကျပ်</h1>
+                    <h1 className="text-gray-400 text-sm lg:text-base">
+                      ဈေးနှုန်း
+                    </h1>
+                    <h1 className="text-red-500 mt-1 text-sm lg:text-base">
+                      {menu.price} ကျပ်
+                    </h1>
                   </div>
                 </td>
-                <td className="px-3 py-4 spacer">
+                <td className="px-3 py-4 hidden lg:table-cell">
                   <div>
                     <h1 className="text-gray-400">အမျိုးအစား</h1>
                     <h1 className="text-red-500 mt-1 capitalize">
@@ -89,7 +95,7 @@ const MenuItemList: React.FC<MenuItemListProp> = ({ isShowing }) => {
                     </h1>
                   </div>
                 </td>
-                <td className="px-3 py-4">
+                <td className="px-3 py-4 hidden lg:table-cell">
                   <div>
                     <h1 className="text-gray-400">ဖော်ပြချက်</h1>
                     <h1 className="text-red-500 mt-1 truncate">
@@ -97,29 +103,33 @@ const MenuItemList: React.FC<MenuItemListProp> = ({ isShowing }) => {
                     </h1>
                   </div>
                 </td>
-                <td className="px-3 py-4">
+                <td className="px-3 py-4 hidden lg:table-cell">
                   <div>
                     <h1 className="text-gray-400">သတ်မှတ်ချက်</h1>
                     <h1 className="text-red-500 mt-1">{menu.rating}</h1>
                   </div>
                 </td>
-                <td className="px-3 py-4">
+                <td className="px-3 py-4 hidden lg:table-cell">
                   <div>
-                    <h1 className="text-gray-400">စုစုပေါင်းကြည့်ရှုမှု</h1>
+                    <h1 className="text-gray-400 ">စုစုပေါင်းကြည့်ရှုမှု</h1>
                     <h1 className="text-red-500 mt-1">{menu.view_count}</h1>
                   </div>
                 </td>
                 <td className="px-3 py-4">
                   <div>
-                    <h1 className="text-gray-400">အခြေအနေ</h1>
-                    <h1 className="text-red-500 mt-1">
+                    <h1 className="text-gray-400 text-sm lg:text-base">
+                      အခြေအနေ
+                    </h1>
+                    <h1 className="text-red-500 mt-1 text-sm lg:text-base">
                       {menu.is_available ? "ရနိုင်သည်" : "မရနိုင်ပါ"}
                     </h1>
                   </div>
                 </td>
                 <td className="px-3 py-4 text-center">
                   <div className="flex-1">
-                    <h1 className="text-gray-400">လုပ်ဆောင်ချက်</h1>
+                    <h1 className="text-gray-400 text-sm lg:text-base">
+                      လုပ်ဆောင်ချက်
+                    </h1>
                     <h1 className="text-red-500 mt-1 ">
                       <Edit className="mr-3" fontSize="small" />{" "}
                       <Delete fontSize="small" />

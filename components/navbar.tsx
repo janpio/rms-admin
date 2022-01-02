@@ -73,7 +73,7 @@ const Navbar = ({ className }: NavbarProps) => {
           {navlist.map((nav, i) => {
             const active = asPath === nav.href;
             const className =
-              "text-left border border-white rounded-md py-1 py-1hover:border-red-500 hover:text-red-500 hover:border-red-500 text-base";
+              "text-left border border-white rounded-md py-1 py-1hover:border-red-500 hover:text-red-500 hover:border-red-500 text-sm lg:text-base";
             return (
               <React.Fragment key={i}>
                 <li
