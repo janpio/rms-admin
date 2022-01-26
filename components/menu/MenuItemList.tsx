@@ -130,7 +130,7 @@ const MenuItemList: React.FC<MenuItemListProp> = ({ isShowing }) => {
                           fontSize="small"
                         />{" "}
                         <Delete
-                          onClick={() => menuAPI.deleteMenu(menu.id)}
+                          // onClick={() => menuAPI.deleteMenu(menu?.id)}
                           fontSize="small"
                         />
                       </h1>
