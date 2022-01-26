@@ -3,9 +3,14 @@ import Tag from "models/Tag";
 import React from "react";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
+
+type TagBoxSelect = {
+  label: string;
+  value: number;
+};
 type TagBoxProps = {
   classNames?: string;
-  onChange?: (tags: Tag[]) => void;
+  onChange?: (tags: any) => void;
 };
 export default function TagBox({ classNames, onChange }: TagBoxProps) {
   const animatedComponents = makeAnimated();
@@ -42,7 +47,9 @@ export default function TagBox({ classNames, onChange }: TagBoxProps) {
 
   const { tags, isLoading, isError } = useTag();
 
-  const _tagOptions = tags?.map((t) => ({ label: t.name, value: t.id }));
+  const _tagOptions: TagBoxSelect[] = tags
+    ? tags.map((t) => ({ label: t.name, value: t.id }))
+    : [];
 
   if (isLoading) return <div>Loading</div>;
   if (isError) return <div>Error</div>;
