@@ -1,5 +1,6 @@
 import { Transition } from "@headlessui/react";
 import { Delete, Edit } from "@mui/icons-material";
+import MenuAPI from "api/MenuAPI";
 import { baseURL } from "config";
 import Menu from "models/Menu";
 import Image from "next/image";
@@ -12,6 +13,7 @@ type MenuItemListProp = {
   isShowing: boolean;
 };
 const MenuItemList: React.FC<MenuItemListProp> = ({ isShowing }) => {
+  const menuAPI = new MenuAPI();
   const [visibleCreateMenu, setVisibleCreateMenu] = useState(false);
   const { data: Menus, error } = useSWR<Menu[]>(
     baseURL + "/api/menus",
@@ -43,18 +45,6 @@ const MenuItemList: React.FC<MenuItemListProp> = ({ isShowing }) => {
           style={{ borderCollapse: "separate", borderSpacing: "0 1em" }}
           className="table-fixed w-full"
         >
-          {/* <thead>
-            <tr>
-              <th>Name</th>
-              <th>Price</th>
-              <th>Category</th>
-              <th>Description</th>
-              <th>Rating</th>
-              <th>Total View</th>
-              <th>Available</th>
-              <th>Action</th>
-            </tr>
-          </thead> */}
           <tbody>
             {Menus?.map((menu) => (
               <tr
@@ -131,8 +121,15 @@ const MenuItemList: React.FC<MenuItemListProp> = ({ isShowing }) => {
                       လုပ်ဆောင်ချက်
                     </h1>
                     <h1 className="text-red-500 mt-1 ">
-                      <Edit className="mr-3" fontSize="small" />{" "}
-                      <Delete fontSize="small" />
+                      <Edit
+                        onClick={() => alert("Edit")}
+                        className="mr-3"
+                        fontSize="small"
+                      />{" "}
+                      <Delete
+                        onClick={() => menuAPI.deleteMenu(menu.id)}
+                        fontSize="small"
+                      />
                     </h1>
                   </div>
                 </td>

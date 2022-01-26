@@ -10,8 +10,8 @@ type FilterMenuProp = {
 export default function FilterMenu({ onClickCreate }: FilterMenuProp) {
   const { tags } = useTag();
   const { categories } = useCategory();
-  const [tag, setTag] = useState(tags![0]);
-  const [category, setCategory] = useState(categories![0]);
+  const [tag, setTag] = useState();
+  const [category, setCategory] = useState();
   const [enabled, setEnabled] = useState(false);
   return (
     <div className="flex relative gap-3 items-center py-2">
@@ -103,9 +103,9 @@ export default function FilterMenu({ onClickCreate }: FilterMenuProp) {
               <input placeholder="Kax" />
             </div>
           </div>
-          <button className="border px-3 mt-3 text-white py-1 flex items-center shadow-sm rounded-md bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+          <Popover.Button className="border px-3 mt-3 text-white py-1 flex items-center shadow-sm rounded-md bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
             Ok
-          </button>
+          </Popover.Button>
         </Popover.Panel>
       </Popover>
       <button
