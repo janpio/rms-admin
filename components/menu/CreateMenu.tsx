@@ -237,7 +237,7 @@ export default function CreateMenu({
                 control={control}
               />
               <p className="text-red-700 text-sm mt-1">
-                {errors.tags?.message}
+                {errors.tags && "The tags is a required field."}
               </p>
             </div>
 

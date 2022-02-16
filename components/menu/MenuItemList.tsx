@@ -136,8 +136,9 @@ const MenuItemList: React.FC<MenuItemListProp> = ({ isShowing }) => {
                         <Delete
                           className="cursor-pointer"
                           onClick={() => {
-                            menuAPI.deleteMenu(menu?.id!);
-                            refreshMenuList();
+                            menuAPI
+                              .deleteMenu(menu?.id!)
+                              .then(() => refreshMenuList());
                           }}
                           fontSize="small"
                         />
