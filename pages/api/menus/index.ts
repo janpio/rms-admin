@@ -6,6 +6,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  res.json(prisma);
+  res.end();
   switch (req.method) {
     case "GET":
       const menus = await prisma.menu.findMany({
@@ -61,6 +63,8 @@ export default async function handler(
       });
       res.status(200).json(response);
       break;
+    default:
+      res.status(404).json("Not Allow Method");
   }
 }
 export const config = {
