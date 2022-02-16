@@ -1,7 +1,7 @@
 import { Switch, Transition } from "@headlessui/react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Close } from "@mui/icons-material";
-import MenuAPI from "api/MenuAPI";
+import MenuAPI from "appApi/MenuAPI";
 import { useCategory, useTag } from "hooks";
 import Image from "next/image";
 import { Fragment, useState } from "react";

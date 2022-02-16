@@ -1,6 +1,6 @@
 import { Transition } from "@headlessui/react";
 import { Delete, Edit } from "@mui/icons-material";
-import MenuAPI from "api/MenuAPI";
+import MenuAPI from "appApi/MenuAPI";
 import Menu from "models/Menu";
 import Image from "next/image";
 import React, { useState } from "react";
