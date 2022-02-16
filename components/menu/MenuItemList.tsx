@@ -15,13 +15,9 @@ type MenuItemListProp = {
 const MenuItemList: React.FC<MenuItemListProp> = ({ isShowing }) => {
   const menuAPI = new MenuAPI();
   const [visibleCreateMenu, setVisibleCreateMenu] = useState(false);
-  const { data: menus, error } = useSWR<Menu[]>(
-    baseURL + "/api/menus",
-    fetcher
-  );
-
+  const { data: menus, error } = useSWR<Menu[]>("/api/menus", fetcher);
   const refreshMenuList = () => {
-    mutate(baseURL + "/api/menus");
+    mutate("/api/menus");
   };
   return (
     <Transition
