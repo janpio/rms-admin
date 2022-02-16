@@ -1,7 +1,6 @@
 import { Transition } from "@headlessui/react";
 import { Delete, Edit } from "@mui/icons-material";
 import MenuAPI from "api/MenuAPI";
-import { baseURL } from "config";
 import Menu from "models/Menu";
 import Image from "next/image";
 import React, { useState } from "react";
@@ -16,6 +15,7 @@ const MenuItemList: React.FC<MenuItemListProp> = ({ isShowing }) => {
   const menuAPI = new MenuAPI();
   const [visibleCreateMenu, setVisibleCreateMenu] = useState(false);
   const { data: menus, error } = useSWR<Menu[]>("/api/menus", fetcher);
+  console.log(error);
   const refreshMenuList = () => {
     mutate("/api/menus");
   };

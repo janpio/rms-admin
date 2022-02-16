@@ -1,6 +1,5 @@
-import { MenuItemList, MenuAction } from "components/menu";
+import { MenuItemList } from "components/menu";
 import type { NextPage } from "next";
-import { useState } from "react";
 
 const Menu: NextPage = (props) => {
   return (
