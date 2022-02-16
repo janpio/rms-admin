@@ -5,7 +5,7 @@ import { baseURL } from "config";
 import Menu from "models/Menu";
 import Image from "next/image";
 import React, { useState } from "react";
-import useSWR from "swr";
+import useSWR, { mutate, trigger } from "swr";
 import { fetcher } from "utli";
 import CreateMenu from "./CreateMenu";
 import FilterMenu from "./FilterMenu";
@@ -20,6 +20,9 @@ const MenuItemList: React.FC<MenuItemListProp> = ({ isShowing }) => {
     fetcher
   );
 
+  const refreshMenuList = () => {
+    mutate(baseURL + "/api/menus");
+  };
   return (
     <Transition
       appear={true}
@@ -36,6 +39,7 @@ const MenuItemList: React.FC<MenuItemListProp> = ({ isShowing }) => {
       </Transition.Child>
       <Transition.Child>
         <CreateMenu
+          triggerRefreshMenuList={() => refreshMenuList()}
           isShowing={visibleCreateMenu}
           closeDialogModal={() => setVisibleCreateMenu(false)}
         />
@@ -130,7 +134,11 @@ const MenuItemList: React.FC<MenuItemListProp> = ({ isShowing }) => {
                           fontSize="small"
                         />{" "}
                         <Delete
-                          // onClick={() => menuAPI.deleteMenu(menu?.id)}
+                          className="cursor-pointer"
+                          onClick={() => {
+                            menuAPI.deleteMenu(menu?.id!);
+                            refreshMenuList();
+                          }}
                           fontSize="small"
                         />
                       </h1>

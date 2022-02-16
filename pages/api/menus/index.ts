@@ -1,7 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { PrismaClient } from "@prisma/client";
-import type { NextApiRequest, NextApiResponse } from "next";
 import prisma from "lib/prisma";
+import type { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
   req: NextApiRequest,
@@ -27,11 +26,19 @@ export default async function handler(
       res.status(200).json(menus);
       break;
     case "POST":
-      const { name, price, description, image, tags, category } = req.body;
-      const _tags = tags.map((t: { value: number }) => ({
+      const {
+        name,
+        price,
+        description,
+        image,
+        tags,
+        categoryId,
+        is_available,
+      } = req.body;
+      const _tags = tags.map((id: number) => ({
         tag: {
           connect: {
-            id: t.value,
+            id: id,
           },
         },
       }));
@@ -41,9 +48,10 @@ export default async function handler(
           price: price,
           description: description,
           menu_image: image,
+          is_available: is_available,
           categories: {
             connect: {
-              id: category.id,
+              id: categoryId,
             },
           },
           tags: {
@@ -55,3 +63,10 @@ export default async function handler(
       break;
   }
 }
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: "4mb",
+    },
+  },
+};

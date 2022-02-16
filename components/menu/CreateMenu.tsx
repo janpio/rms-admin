@@ -1,61 +1,107 @@
-import { Dialog, Transition } from "@headlessui/react";
+import { Switch, Transition } from "@headlessui/react";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { Close } from "@mui/icons-material";
-import SelectBox from "components/common/SelectBox";
-import TagBox from "components/common/TagBox";
+import MenuAPI from "api/MenuAPI";
 import { baseURL } from "config";
-import Category from "models/Category";
-import Tag from "models/Tag";
+import { useCategory, useTag } from "hooks";
 import Image from "next/image";
 import { Fragment, useRef, useState } from "react";
+import {
+  Controller,
+  FieldError,
+  SubmitHandler,
+  useForm,
+} from "react-hook-form";
+import Select from "react-select";
 import { toBase64 } from "utli";
+import * as yup from "yup";
 
 type CreateMenuProp = {
   isShowing: boolean;
   closeDialogModal: Function;
+  triggerRefreshMenuList: Function;
 };
+
+type ReactSelectOption = {
+  label: string;
+  value: number;
+};
+
+type FormValues = {
+  name: string;
+  price: number;
+  category: ReactSelectOption;
+  tags: ReactSelectOption[];
+  description: string;
+  menu_image: FileList;
+  is_available: boolean;
+};
+
 export default function CreateMenu({
+  triggerRefreshMenuList,
   isShowing,
   closeDialogModal,
 }: CreateMenuProp) {
   const [imageFile, setImageFile] = useState<File>();
-  const [selectedCategory, setSelectedCategory] = useState<Category>();
-  const [selectedTags, setSelectedTags] = useState<Tag[]>();
+
+  const menuAPI = new MenuAPI();
   const [isSaveLoading, setIsSaveLoading] = useState<boolean>(false);
-  const nameRef = useRef<HTMLInputElement>(null);
-  const priceRef = useRef<HTMLInputElement>(null);
-  const descRef = useRef<HTMLTextAreaElement>(null);
-  const imageRef = useRef<HTMLInputElement>(null);
 
   function closeModal() {
     closeDialogModal();
   }
 
-  const createMenu = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const image = await toBase64(imageFile!);
-    setIsSaveLoading(true);
-    const data = {
-      name: nameRef.current?.value!,
-      price: priceRef.current?.value!,
-      category: selectedCategory,
-      tags: selectedTags!,
-      description: descRef.current?.value!,
-      image: image,
-    };
-    await fetch(baseURL + "/api/menus", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
+  const { data: tagOptions } = useTag(true);
+  const { data: categoriesOptions } = useCategory(true);
+  const schema = yup
+    .object({
+      name: yup.string().required("The name is a required field."),
+      price: yup.number().required("The price is a requred field."),
+      category: yup.object().required("The category is required field."),
+      tags: yup.array().required("The tags is required field"),
+      description: yup.string().required("The description is required field."),
+      menu_image: yup
+        .mixed()
+        .test("EmptyFile", "Please select a image", (value) => {
+          return value?.length !== 0;
+        })
+        .test("fileType", "Unsupported File Format", function (value) {
+          return ["image/jpg", "image/jpeg", "image/png"].includes(
+            value?.[0]?.type
+          );
+        })
+        .required("File is required field"),
+      is_available: yup.boolean().required("This field is required field."),
     })
-      .then((response) => response.json())
-      .then((result) => {
+    .required();
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    control,
+    formState: { errors },
+  } = useForm<FormValues>({ resolver: yupResolver(schema) });
+
+  const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    setIsSaveLoading(true);
+    const menuData = {
+      name: data.name,
+      price: data.price,
+      categoryId: data.category.value,
+      tags: data.tags.map((tag) => tag.value),
+      description: data.description,
+      is_available: data.is_available,
+      image: await toBase64(data.menu_image[0]),
+    };
+    menuAPI
+      .createMenu(menuData)
+      .then((data) => {
+        triggerRefreshMenuList();
         setIsSaveLoading(false);
-        setImageFile(undefined);
-        closeDialogModal();
       })
-      .catch((err) => {
+      .catch((e) => {
+        console.log(e);
         setIsSaveLoading(false);
       });
   };
@@ -70,178 +116,256 @@ export default function CreateMenu({
       leaveTo="opacity-0"
       as={Fragment}
     >
-      <Dialog
+      {/* <Dialog
         as="div"
         className="fixed inset-0 z-10 px-28 py-20 overflow-y-auto bg-white rounded-lg shadow-lg border"
         onClose={closeModal}
-      >
-        <form className="mx-auto space-y-4" onSubmit={createMenu}>
-          <div className="flex justify-between">
-            <h1 className="font-bold text-xl tracking-wider">Create Menu</h1>
-            <Close
-              fontSize="medium"
-              sx={{
-                ":hover": {
-                  backgroundColor: "gray",
-                  color: "white",
-                  cursor: "pointer",
-                },
-                borderRadius: "50%",
-              }}
-              onClick={() => closeDialogModal()}
-            />
-          </div>
-          <section className="grid grid-cols-2 gap-5">
-            <div className="space-y-4">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium">
-                  Name
-                </label>
-                <input
-                  ref={nameRef}
-                  type="text"
-                  name="name"
-                  id="name"
-                  autoComplete="given-name"
-                  className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="price"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Price
-                </label>
-                <input
-                  ref={priceRef}
-                  type="number"
-                  name="price"
-                  id="price"
-                  className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="category"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Category
-                </label>
-                <SelectBox
-                  classNames="mt-1"
-                  onSelect={(category) => setSelectedCategory(category)}
-                />
-              </div>
-
-              <div className="flex-grow-0">
-                <label
-                  htmlFor="tags"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Tag
-                </label>
-                <TagBox
-                  onChange={(tags) => setSelectedTags(tags)}
-                  classNames="mt-1"
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="description"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Description
-                </label>
-                <textarea
-                  ref={descRef}
-                  name="description"
-                  id="description"
-                  className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-              >
-                {isSaveLoading && (
-                  <svg
-                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
-                  </svg>
-                )}
-                Save
-              </button>
-            </div>
+      > */}
+      <form className="mx-auto space-y-4" onSubmit={handleSubmit(onSubmit)}>
+        <div className="flex justify-between">
+          <h1 className="font-bold text-xl tracking-wider">Create Menu</h1>
+          <Close
+            fontSize="medium"
+            sx={{
+              ":hover": {
+                backgroundColor: "gray",
+                color: "white",
+                cursor: "pointer",
+              },
+              borderRadius: "50%",
+            }}
+            onClick={() => closeDialogModal()}
+          />
+        </div>
+        <section className="grid grid-cols-2 gap-5">
+          <div className="space-y-3">
             <div>
-              <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700">
-                  Menu Image
-                </label>
-                <div className="flex mt-1 cursor-pointer items-center justify-center w-full">
-                  <label className="flex flex-col w-full h-32 border-4 border-dashed hover:bg-gray-100 hover:border-gray-300">
-                    <div className="flex flex-col items-center justify-center pt-7">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="w-12 h-12 text-gray-400 group-hover:text-gray-600"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                      >
-                        <path
-                          fillRule="evenodd"
-                          d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
-                          clipRule="evenodd"
-                        />
-                      </svg>
-                      <p className="pt-1 text-sm tracking-wider text-gray-400 group-hover:text-gray-600">
-                        Select a photo
-                      </p>
-                    </div>
-                    <input
-                      ref={imageRef}
-                      onChange={(e) => setImageFile(e.target.files![0])}
-                      id="menu_image"
-                      name="menu_image"
-                      type="file"
-                      className="sr-only"
-                    />
-                  </label>
-                </div>
-              </div>
-              {imageFile && (
-                <div className="rounded-md relative w-full h-4/6 overflow-hidden">
-                  <Image
-                    layout="fill"
-                    objectFit="cover"
-                    src={URL.createObjectURL(imageFile)}
-                    alt="menu image"
-                  />
-                </div>
-              )}
+              <label htmlFor="name" className="block text-sm font-medium">
+                Name
+              </label>
+              <input
+                type="text"
+                {...register("name")}
+                id="name"
+                autoComplete="given-name"
+                className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+              />
+              <p className="text-red-700 text-sm mt-1">
+                {errors.name?.message}
+              </p>
             </div>
-          </section>
-        </form>
-      </Dialog>
+
+            <div>
+              <label
+                htmlFor="price"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Price
+              </label>
+              <input
+                type="number"
+                {...register("price")}
+                id="price"
+                className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+              />
+              <p className="text-red-700 text-sm mt-1">
+                {errors.price?.message}
+              </p>
+            </div>
+
+            <div>
+              <label
+                htmlFor="category"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Category
+              </label>
+              <Controller
+                render={({ field: { onChange, name, ref } }) => (
+                  <Select
+                    ref={ref}
+                    name={name}
+                    className="mt-1"
+                    styles={{
+                      input: (provided: any) => ({
+                        ...provided,
+                        "input:focus": {
+                          boxShadow: "none",
+                        },
+                      }),
+                    }}
+                    onChange={onChange}
+                    options={categoriesOptions as ReactSelectOption[]}
+                  />
+                )}
+                name="category"
+                control={control}
+              />
+              <p className="text-red-700 text-sm mt-1">
+                {(errors.category as FieldError)?.message}
+              </p>
+            </div>
+
+            <div className="flex-grow-0">
+              <label
+                htmlFor="tags"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Tag
+              </label>
+              <Controller
+                render={({ field: { onChange, name, ref } }) => (
+                  <Select
+                    ref={ref}
+                    name={name}
+                    className="mt-1"
+                    styles={{
+                      input: (provided: any) => ({
+                        ...provided,
+                        "input:focus": {
+                          boxShadow: "none",
+                        },
+                      }),
+                    }}
+                    isMulti
+                    closeMenuOnSelect={false}
+                    onChange={onChange}
+                    options={tagOptions as ReactSelectOption[]}
+                  />
+                )}
+                name="tags"
+                control={control}
+              />
+              <p className="text-red-700 text-sm mt-1">
+                {errors.tags?.message}
+              </p>
+            </div>
+
+            <div>
+              <label
+                htmlFor="description"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Description
+              </label>
+              <textarea
+                id="description"
+                {...register("description")}
+                className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+              />
+              <p className="text-red-700 text-sm mt-1">
+                {errors.description?.message}
+              </p>
+            </div>
+
+            <button
+              type="submit"
+              className="flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+            >
+              {isSaveLoading && (
+                <svg
+                  className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+              )}
+              Save
+            </button>
+          </div>
+          <div className="space-y-4">
+            <div className="flex-grow-0">
+              <label
+                htmlFor="tags"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Is Available
+              </label>
+              <Controller
+                defaultValue={false}
+                render={({ field: { onChange, value } }) => (
+                  <Switch
+                    checked={value}
+                    onChange={onChange}
+                    className={`${
+                      value == true ? "bg-red-600" : "bg-gray-200"
+                    } mt-3 relative inline-flex items-center h-6 rounded-full w-11 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500`}
+                  >
+                    <span
+                      className={`${
+                        value == true ? "translate-x-6" : "translate-x-1"
+                      } inline-block w-4 h-4 transform bg-white rounded-full transition-transform`}
+                    />
+                  </Switch>
+                )}
+                name="is_available"
+                control={control}
+              />
+            </div>
+            <div className="mb-2">
+              <label className="block text-sm font-medium text-gray-700">
+                Menu Image
+              </label>
+              <div className="flex mt-1  items-center w-full">
+                <label className="flex flex-col cursor-pointer border-red-500 rounded-md border-2 bg-red-500 text-white border-solid p-1 hover:bg-red-700 hover:border-red-300">
+                  <div className="flex cursor-pointer items-center gap-2 justify-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="w-5 h-5 text-white "
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                    <p className="text-sm tracking-wider text-white">
+                      Select a photo
+                    </p>
+                  </div>
+                  <input
+                    id="menu_image"
+                    {...register("menu_image")}
+                    type="file"
+                    className="sr-only"
+                    // required
+                  />
+                </label>
+              </div>
+              <p className="text-red-700 text-sm mt-1">
+                {errors.menu_image?.message}
+              </p>
+            </div>
+            {watch("menu_image")?.length > 0 && (
+              <div className="rounded-md relative w-full lg:w-1/3 h-1/2 lg:h-1/3 overflow-hidden border-gray-300 border-2">
+                <Image
+                  layout="fill"
+                  objectFit="cover"
+                  src={URL.createObjectURL(watch("menu_image")?.[0])}
+                  alt="menu image"
+                />
+              </div>
+            )}
+          </div>
+        </section>
+      </form>
+      {/* </Dialog> */}
     </Transition>
   );
 }

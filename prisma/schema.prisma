@@ -4,13 +4,13 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url      ="file:./dev.db"
+  url      = "file:./dev.db"
 
 }
 
 model Account {
   id                 String  @id @default(cuid())
-  userId             String
+  userId             Int
   type               String
   provider           String
   providerAccountId  String
@@ -31,7 +31,7 @@ model Account {
 model Session {
   id           String   @id @default(cuid())
   sessionToken String   @unique
-  userId       String
+  userId       Int
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
@@ -45,7 +45,7 @@ model VerificationToken {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            Int       @id @default(autoincrement())
   image         String?
   name          String
   phone         String?
@@ -57,26 +57,28 @@ model User {
   sessions      Session[]
   Menu          Menu[]
 
+  Order Order[]
   @@map("users")
 }
 
 model Menu {
-  id           Int         @id @default(autoincrement())
+  id           Int           @id @default(autoincrement())
   name         String
   price        Decimal
   menu_image   String?
   description  String?
-  rating       Int         @default(0)
-  is_available Boolean     @default(false)
-  view_count   Int         @default(0)
+  rating       Int           @default(0)
+  is_available Boolean       @default(false)
+  view_count   Int           @default(0)
   slug         String?
-  creatorId    String?
-  createdAt    DateTime    @default(now()) @map("created_at")
-  updatedAt    DateTime    @updatedAt @map("updated_at")
+  creatorId    Int?
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
   categoryId   Int?
-  categories   Category?   @relation(fields: [categoryId], references: [id])
-  creator      User?       @relation(fields: [creatorId], references: [id])
-  tags         TagOnMenu?
+  categories   Category?     @relation(fields: [categoryId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+  creator      User?         @relation(fields: [creatorId], references: [id], onDelete: SetNull, onUpdate: SetNull)
+  tags         TagOnMenu[]
+  transactions Transaction[]
 
   @@map("menus")
 }
@@ -89,20 +91,42 @@ model Category {
   @@map("categories")
 }
 
-model TagOnMenu {
-  tagId  Int
-  menuId Int
-  menu   Menu? @relation(fields: [menuId], references: [id])
-  tag    Tag?  @relation(fields: [tagId], references: [id])
-
-  @@id([menuId, tagId])
-  @@map("tagsonmenu")
-}
-
 model Tag {
   id    Int         @id @default(autoincrement())
   name  String
   menus TagOnMenu[]
 
   @@map("tags")
+}
+
+model TagOnMenu {
+  id     Int   @id @default(autoincrement())
+  tagId  Int
+  menuId Int?
+  menu   Menu? @relation(fields: [menuId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+  tag    Tag?  @relation(fields: [tagId], references: [id])
+
+  @@map("tagsonmenu")
+}
+
+model Order {
+  id           Int           @id @default(autoincrement())
+  orderBy      Int?
+  user         User?         @relation(fields: [orderBy], references: [id], onDelete: NoAction)
+  state        String        @default("READY")
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  transactions Transaction[]
+
+  @@map("orders")
+}
+
+model Transaction {
+  id      Int   @id @default(autoincrement())
+  orderId Int
+  menuId  Int?
+  order   Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  menu    Menu? @relation(fields: [menuId], references: [id], onDelete: SetNull, onUpdate: Cascade)
+
+  @@map("transactions")
 }

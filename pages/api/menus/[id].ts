@@ -6,13 +6,16 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  const id = parseInt(req.query.id as string);
+  let response = null;
   switch (req.method) {
     case "DELETE":
-      const id = parseInt(req.query.id as string);
-      // res.json(id);
-      // res.end();
-      const deletedMenu = await prisma.menu.delete({ where: { id: id } });
-      res.status(200).json(deletedMenu);
+      response = await prisma.menu.delete({ where: { id: id } });
+      res.status(200).json(response);
+      break;
+    case "GET":
+      response = await prisma.menu.findFirst({ where: { id: id } });
+      res.status(200).json(response);
       break;
   }
 }

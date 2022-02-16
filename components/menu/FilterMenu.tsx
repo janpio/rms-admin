@@ -1,22 +1,20 @@
 import { Popover, RadioGroup, Switch } from "@headlessui/react";
 import { Create, FilterList } from "@mui/icons-material";
-import SelectBox from "components/common/SelectBox";
-import TagBox from "components/common/TagBox";
 import { useCategory, useTag } from "hooks";
+import Category from "models/Category";
+import Tag from "models/Tag";
 import { useState } from "react";
 type FilterMenuProp = {
   onClickCreate?: () => void;
 };
 export default function FilterMenu({ onClickCreate }: FilterMenuProp) {
-  const { tags } = useTag();
-  const { categories } = useCategory();
+  const { data: tags } = useTag();
+  const { data: categories } = useCategory();
   const [tag, setTag] = useState();
   const [category, setCategory] = useState();
   const [enabled, setEnabled] = useState(false);
   return (
     <div className="flex relative gap-3 items-center py-2">
-      <TagBox />
-      <SelectBox classNames="w-32 grow" />
       <Popover className="ml-auto">
         <Popover.Button
           onClick={onClickCreate}
@@ -38,7 +36,7 @@ export default function FilterMenu({ onClickCreate }: FilterMenuProp) {
                 <RadioGroup.Label>
                   <h1 className="font-semibold tracking-wider">Tags</h1>
                 </RadioGroup.Label>
-                {tags?.map((t, i) => (
+                {(tags as Tag[])?.map((t) => (
                   <RadioGroup.Option key={t.id} value={t.name}>
                     {({ checked }) => (
                       <span
@@ -58,7 +56,7 @@ export default function FilterMenu({ onClickCreate }: FilterMenuProp) {
                 <RadioGroup.Label>
                   <h1 className="font-semibold tracking-wider">Categories</h1>
                 </RadioGroup.Label>
-                {categories?.map((t) => (
+                {(categories as Category[])?.map((t) => (
                   <RadioGroup.Option key={t.id} value={t.name}>
                     {({ checked }) => (
                       <span
