@@ -5,7 +5,7 @@ import { baseURL } from "config";
 import Menu from "models/Menu";
 import Image from "next/image";
 import React, { useState } from "react";
-import useSWR, { mutate, trigger } from "swr";
+import useSWR, { mutate } from "swr";
 import { fetcher } from "utli";
 import CreateMenu from "./CreateMenu";
 import FilterMenu from "./FilterMenu";
