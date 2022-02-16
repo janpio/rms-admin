@@ -1,6 +1,7 @@
 import { Transition } from "@headlessui/react";
 import { Delete, Edit } from "@mui/icons-material";
 import MenuAPI from "appApi/MenuAPI";
+import axios from "axios";
 import Menu from "models/Menu";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
@@ -16,11 +17,9 @@ const MenuItemList: React.FC<MenuItemListProp> = ({ isShowing }) => {
   const [visibleCreateMenu, setVisibleCreateMenu] = useState(false);
   const { data: menus, error } = useSWR<Menu[]>("/api/menus", fetcher);
   useEffect(() => {
-    fetch("/api/menus")
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-      });
+    axios.get("/api/menus").then((data) => {
+      console.log(data);
+    });
   }, []);
   console.log(error);
   const refreshMenuList = () => {
