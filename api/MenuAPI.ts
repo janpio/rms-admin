@@ -2,11 +2,11 @@ import { baseURL } from "config";
 
 export default class MenuAPI {
   deleteMenu = async (id: number) => {
-    return await fetch(`${baseURL}/api/menus/${id}`, { method: "delete" });
+    return await fetch(`/api/menus/${id}`, { method: "delete" });
   };
 
   createMenu = async (data = {}) => {
-    const response = await fetch(`${baseURL}/api/menus`, {
+    const response = await fetch(`/api/menus`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

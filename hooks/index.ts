@@ -1,6 +1,5 @@
-import { baseURL } from "config";
-import Tag from "models/Tag";
 import Category from "models/Category";
+import Tag from "models/Tag";
 import useSWR from "swr";
 import { fetcher } from "utli";
 type ReactSelectOption = {
@@ -12,7 +11,7 @@ export function useTag(isReactSelect: boolean = false): {
   isLoading: boolean;
   isError: any;
 } {
-  const { data, error } = useSWR<Tag[]>(baseURL + "/api/tags", fetcher);
+  const { data, error } = useSWR<Tag[]>("/api/tags", fetcher);
 
   return {
     data: isReactSelect
@@ -24,10 +23,7 @@ export function useTag(isReactSelect: boolean = false): {
 }
 
 export function useCategory(isReactSelect: boolean = false) {
-  const { data, error } = useSWR<Category[]>(
-    baseURL + "/api/categories",
-    fetcher
-  );
+  const { data, error } = useSWR<Category[]>("/api/categories", fetcher);
 
   return {
     data: isReactSelect
