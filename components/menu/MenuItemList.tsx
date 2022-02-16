@@ -1,10 +1,9 @@
 import { Transition } from "@headlessui/react";
 import { Delete, Edit } from "@mui/icons-material";
 import MenuAPI from "appApi/MenuAPI";
-import axios from "axios";
 import Menu from "models/Menu";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import useSWR, { mutate } from "swr";
 import { fetcher } from "utli";
 import CreateMenu from "./CreateMenu";
@@ -15,13 +14,7 @@ type MenuItemListProp = {
 const MenuItemList: React.FC<MenuItemListProp> = ({ isShowing }) => {
   const menuAPI = new MenuAPI();
   const [visibleCreateMenu, setVisibleCreateMenu] = useState(false);
-  const { data: menus, error } = useSWR<Menu[]>("/api/menus", fetcher);
-  useEffect(() => {
-    axios.get("/api/menus").then((data) => {
-      console.log(data);
-    });
-  }, []);
-  console.log(error);
+  const { data: menus } = useSWR<Menu[]>("/api/menus", fetcher);
   const refreshMenuList = () => {
     mutate("/api/menus");
   };
@@ -53,7 +46,7 @@ const MenuItemList: React.FC<MenuItemListProp> = ({ isShowing }) => {
         >
           <tbody>
             {menus &&
-              menus?.map((menu) => (
+              menus.map((menu) => (
                 <tr
                   className="shadow-sm font-semibold bg-white rounded-lg"
                   key={menu.id}
@@ -94,6 +87,16 @@ const MenuItemList: React.FC<MenuItemListProp> = ({ isShowing }) => {
                       </h1>
                     </div>
                   </td>
+                  <td className="px-3 py-4">
+                    <div>
+                      <h1 className="text-gray-400 text-sm lg:text-base">
+                        အခြေအနေ
+                      </h1>
+                      <h1 className="text-red-500 mt-1 text-sm lg:text-base">
+                        {menu.is_available ? "ရနိုင်သည်" : "မရနိုင်ပါ"}
+                      </h1>
+                    </div>
+                  </td>
                   <td className="px-3 py-4 hidden lg:table-cell">
                     <div>
                       <h1 className="text-gray-400">ဖော်ပြချက်</h1>
@@ -112,16 +115,6 @@ const MenuItemList: React.FC<MenuItemListProp> = ({ isShowing }) => {
                     <div>
                       <h1 className="text-gray-400 ">စုစုပေါင်းကြည့်ရှုမှု</h1>
                       <h1 className="text-red-500 mt-1">{menu.view_count}</h1>
-                    </div>
-                  </td>
-                  <td className="px-3 py-4">
-                    <div>
-                      <h1 className="text-gray-400 text-sm lg:text-base">
-                        အခြေအနေ
-                      </h1>
-                      <h1 className="text-red-500 mt-1 text-sm lg:text-base">
-                        {menu.is_available ? "ရနိုင်သည်" : "မရနိုင်ပါ"}
-                      </h1>
                     </div>
                   </td>
                   <td className="px-3 py-4 text-center">

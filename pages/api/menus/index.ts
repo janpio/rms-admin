@@ -6,8 +6,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  res.json(prisma);
-  res.end();
   switch (req.method) {
     case "GET":
       const menus = await prisma.menu.findMany({

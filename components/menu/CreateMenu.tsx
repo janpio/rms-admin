@@ -41,8 +41,6 @@ export default function CreateMenu({
   isShowing,
   closeDialogModal,
 }: CreateMenuProp) {
-  const [imageFile, setImageFile] = useState<File>();
-
   const menuAPI = new MenuAPI();
   const [isSaveLoading, setIsSaveLoading] = useState<boolean>(false);
 
@@ -52,6 +50,7 @@ export default function CreateMenu({
 
   const { data: tagOptions } = useTag(true);
   const { data: categoriesOptions } = useCategory(true);
+
   const schema = yup
     .object({
       name: yup.string().required("The name is a required field."),
